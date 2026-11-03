@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "saas-product-analytics-platform"
+version = "0.1.0"
+description = "Local Data Engineering project: Postgres -> Bronze/Silver/Gold Parquet -> DuckDB analytics, orchestrated by Airflow."
+requires-python = ">=3.10"
+dependencies = [
+  "pandas>=2.1,<2.3",
+  "numpy>=1.26,<2.0",
+  "pyarrow>=14,<19",
+  "duckdb>=1.0,<1.2",
+  "psycopg2-binary>=2.9,<2.10",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<9", "ruff>=0.5,<0.9", "tabulate>=0.9"]
+
+[project.scripts]
+saas-platform = "saas_platform.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["saas_platform*"]
+
+[tool.setuptools.package-data]
+saas_platform = ["sql/**/*.sql"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["integration: needs a PostgreSQL server"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py310"
+[tool.ruff.lint]
+select = ["E", "F", "I", "B"]
+ignore = ["E501", "B905", "E731"]
